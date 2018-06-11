@@ -160,15 +160,75 @@ int main(int argc, char const *argv[]){
                 apresentar a pontuacao de forma ordenada;
   */
 
+  //teste se imprimir tabuleiro esta funcionando
 
+  /*char tabuleiro[15][15];
+
+  inicia_tabuleiro(tabuleiro);
+
+  tabuleiro[0][0] = 'J';
+  tabuleiro[2][4] = 'A';
+  tabuleiro[3][12] = 'B';
+  tabuleiro[14][14] = 'C';
+
+  imprime_tabuleiro(tabuleiro);
+
+  */
+
+
+
+
+    //teste se trocar_peca esta funcionando
+
+  int a = 1;
+  while (a==1) {
+    printf("Jogador %d sua vez de jogar\n",jogo->atual->jogador_num);
+
+    printf("Suas pedras são:\n");
+    int i = 0;
+
+      for (int d = 0; d < 7; d++){
+        if(jogo->atual->suporte[d]->letra != '-'){
+          printf("%c ",jogo->atual->suporte[d]->letra);
+          i++;
+        }
+      }
+      printf("\n");
+      for (int d = 0; d < i; d++){
+        printf("%d ",d+1);
+      }
+      printf("\n");
+
+      printf("Saco:\n");
+
+      peca_t *toVisit = jogo->saco->inicio;
+      while (toVisit != NULL) {
+        printf("%c ",toVisit->letra);
+        toVisit = toVisit->prox;
+      }
+      printf("\n");
+
+      toVisit = jogo->saco->inicio;
+      while (toVisit != NULL) {
+        printf("%d ",toVisit->ponto);
+        toVisit = toVisit->prox;
+      } 
+      printf("\n");     
+
+      trocar_peca(jogo);
+
+      printf("Para continuar testando digite 1\n");
+      scanf("%d", &a);
+  }
+  
 
   	//testar se jogada esta funcionando
 
-
+  /*
 	int a=0;
 	while (a==0)
 		jogada(jogo); 
-
+  */
           
       
 

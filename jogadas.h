@@ -32,9 +32,12 @@ typedef struct{
   jogador_t *fim;
   jogador_t *atual;
   int pula_vez;
+  char tabuleiro[15][15];
 } jogo_t;
 
 jogo_t *cria_jogo(saco_t *saco);
+void inicia_tabuleiro(char tabuleiro[15][15]);
+void imprime_tabuleiro(char tabuleiro[15][15]);
 void insere_jogador(jogo_t *jogo);
 jogo_t *def_quant_jog (saco_t *saco);
 jogo_t *inicio_jogo ();
