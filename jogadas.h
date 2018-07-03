@@ -2,6 +2,8 @@
 #define JOGADAS_H
 
 #include "saco.h"
+#include "dicionario.h"
+
 //definicao do tipo
 /*
 typedef struct peca {
@@ -33,6 +35,7 @@ typedef struct{
   jogador_t *atual;
   int pula_vez;
   char tabuleiro[15][15];
+  trie_t *dicionario;
 } jogo_t;
 
 jogo_t *cria_jogo(saco_t *saco);

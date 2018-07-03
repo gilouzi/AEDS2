@@ -140,7 +140,7 @@ void trocar_todas_pecas(jogo_t *jogo){
 void trocar_peca(jogo_t *jogo){
 	jogo->pula_vez=0;
 
-	if(jogo->saco->num_elementos == 0) {
+	/*if(jogo->saco->num_elementos == 0) {
 		printf("Nao ha mais pecas para serem trocadas, selecione outra jogada\n");
 	}
 	int pos = rand() % jogo->saco->num_elementos;
@@ -175,7 +175,7 @@ void trocar_peca(jogo_t *jogo){
 	jogo->atual->suporte[d]->ponto = aux->ponto;
 	aux->letra = troca->letra;
 	aux->ponto = troca->ponto;
-	
+	*/
 
 }
 

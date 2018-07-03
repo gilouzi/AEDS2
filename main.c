@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 
 #include "saco.h"
 #include "jogadas.h"
+#include "dicionario.h"
 
 #define BUFSZ 1024 
 
@@ -120,7 +122,7 @@ int main(int argc, char const *argv[]){
 
   //teste se as 7 pecas estao sendo distribuidas
 
-  jogo_t *jogo = inicio_jogo ();
+  /*jogo_t *jogo = inicio_jogo ();
   jogador_t *jogador = jogo->inicio;
 
   for(int i = 0; i < jogo->num_jogadores; i++) {
@@ -130,7 +132,7 @@ int main(int argc, char const *argv[]){
     }
     printf("\n");
     jogador=jogador->prox;
-  }
+  }*/
 
 
 
@@ -180,7 +182,7 @@ int main(int argc, char const *argv[]){
 
     //teste se trocar_peca esta funcionando
 
-  int a = 1;
+  /*int a = 1;
   while (a==1) {
     printf("Jogador %d sua vez de jogar\n",jogo->atual->jogador_num);
 
@@ -219,7 +221,7 @@ int main(int argc, char const *argv[]){
 
       printf("Para continuar testando digite 1\n");
       scanf("%d", &a);
-  }
+  }*/
   
 
   	//testar se jogada esta funcionando
@@ -229,9 +231,27 @@ int main(int argc, char const *argv[]){
 	while (a==0)
 		jogada(jogo); 
   */
-          
-      
 
+
+    //testar se dicionario esta funcionando
+
+
+    FILE *arq = fopen("palavras_validas_teste.txt", "r");
+
+    trie_t *trie = cria_trie();
+    char palavra[1040];
+
+    while (fscanf(arq, "%s\n", palavra) != EOF){
+
+      printf("lido: %s\n",palavra);
+
+      insere_palavra(palavra,trie);
+
+    }
+
+    chamada_busca(trie);
+
+    fclose(arq);
 
 
 

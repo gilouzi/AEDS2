@@ -83,13 +83,13 @@ pacote_t *arruma_pacote() { //criar a lista pecas com suas quantidades disponive
 	ponto=2;
 	insere_valor_pac(pacote,ponto,'D',5);
 	insere_valor_pac(pacote,ponto,'L',5);
-	insere_valor_pac(pacote,ponto,'C',4);
+	insere_valor_pac(pacote,ponto,'C',6);
 	insere_valor_pac(pacote,ponto,'P',4);
 	
 	ponto=3;
 	insere_valor_pac(pacote,ponto,'N',4);
 	insere_valor_pac(pacote,ponto,'B',3);
-	insere_valor_pac(pacote,ponto,'c',2);
+	//insere_valor_pac(pacote,ponto,'c',2);
 	
 	ponto=4;
 	insere_valor_pac(pacote,ponto,'F',2);
