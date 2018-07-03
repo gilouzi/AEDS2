@@ -14,6 +14,7 @@ saco_t *cria_saco(){
 	saco->inicio = NULL;
 	saco->fim = NULL;
 	saco->num_elementos=0;
+	//printf("saco criado\n");
 	return saco;
 }
 
@@ -30,7 +31,7 @@ pacote_t *cria_pacote(){
 	return pacote;
 }
 
-void insere_valor_pac(pacote_t *pacote, int p, char l, int q){
+void insere_valor_pac(pacote_t *pacote, int p, char l, int q){ //vai inserir dentro do pacote as letras com suas quantidades disponiveis
 
 	node_t *novo = (node_t *) malloc(sizeof(node_t));
 
@@ -60,6 +61,8 @@ void insere_valor_pac(pacote_t *pacote, int p, char l, int q){
 	pacote->fim = novo;
 
 	pacote->num_elementos++;
+
+	//printf("inserido no pacote letra %c\n",l);
 
 }
 
@@ -196,10 +199,11 @@ node_t *remove_quant_pacote(pacote_t *pacote, int n) { //retirar uma quantidade 
 
 saco_t *inicializar_saco(){ //colocar todas as pecas disponiveis de forma aleatoria dentro do saco
 	pacote_t *pacote = arruma_pacote();
+	//printf("pacote arrumado\n");
 	saco_t *saco = cria_saco();
-	int n = 25;
+	int n = 24; //quantidade de nodes dentro do saco, ou de letras disponiveis
 	srand(time(NULL));
-	while(saco->num_elementos<120) {
+	while(saco->num_elementos<120) { //quantidade de pecas existentes
 		int pos = rand() % n;
 		node_t *node = remove_quant_pacote(pacote,pos);
 		if(node==NULL){
