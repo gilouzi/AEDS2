@@ -55,27 +55,22 @@ void insere_palavra(char *palavra, trie_t *trie){
 
   int i=0;
   trie_node_t *node = trie->firstLevel;
-  trie_node_t *toVisit;
 
   while(palavra[i+1] != '\0'){
 
     int pos = palavra[i]-97;
 
     if(node[pos].letra == '0'){
-      //printf("if node[pos].letra == 0\n");
       insere_palavra_rest(palavra,trie,i,node);
       return;
     }
     else{
       if(node[pos].filho != NULL){
-       // printf("if node[pos].filho != null\n");
+       //printf("if node[pos].filho != null\n");
         node = node[pos].filho;
       }
       else{
-        trie_node_t *prox = cria_node();
-        node[pos].filho = prox;
-        node = prox;
-        //printf("else\n");
+        //printf("else %s\n", palavra);
         insere_palavra_rest(palavra,trie,i++,node);
         return;
       }
@@ -85,7 +80,9 @@ void insere_palavra(char *palavra, trie_t *trie){
 
 
   int pos = palavra[i]-97; //ultima letra da palavra -> i+1 = '\0'
+  node[pos].letra = palavra[i];
   node[pos].fimPalavra = 1;
+  node[pos].filho = NULL;
 
 }
 
@@ -116,6 +113,7 @@ int busca(trie_t *trie, char *palavra){
     if(node[pos].letra == '0' || node[pos].filho == NULL)
       return 0;
 
+    printf("encontrado %c\n",node[pos].letra);
     node = node[pos].filho;
     i++;
   }
