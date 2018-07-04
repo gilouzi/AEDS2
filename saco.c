@@ -70,45 +70,45 @@ pacote_t *arruma_pacote() { //criar a lista pecas com suas quantidades disponive
 	pacote_t *pacote = cria_pacote();
 
 	int ponto=0;
-	insere_valor_pac(pacote,ponto,'0',3);
+	//insere_valor_pac(pacote,ponto,'0',3);
 
 	ponto=1;
-	insere_valor_pac(pacote,ponto,'A',14);
-	insere_valor_pac(pacote,ponto,'E',11);
-	insere_valor_pac(pacote,ponto,'I',10);
-	insere_valor_pac(pacote,ponto,'O',10);
-	insere_valor_pac(pacote,ponto,'S',8);
-	insere_valor_pac(pacote,ponto,'U',7);
-	insere_valor_pac(pacote,ponto,'M',6);
-	insere_valor_pac(pacote,ponto,'R',6);
-	insere_valor_pac(pacote,ponto,'T',5);
+	insere_valor_pac(pacote,ponto,'a',17);
+	insere_valor_pac(pacote,ponto,'e',11);
+	insere_valor_pac(pacote,ponto,'i',10);
+	insere_valor_pac(pacote,ponto,'o',10);
+	insere_valor_pac(pacote,ponto,'s',8);
+	insere_valor_pac(pacote,ponto,'u',7);
+	insere_valor_pac(pacote,ponto,'m',6);
+	insere_valor_pac(pacote,ponto,'r',6);
+	insere_valor_pac(pacote,ponto,'t',5);
 
 	ponto=2;
-	insere_valor_pac(pacote,ponto,'D',5);
-	insere_valor_pac(pacote,ponto,'L',5);
-	insere_valor_pac(pacote,ponto,'C',6);
-	insere_valor_pac(pacote,ponto,'P',4);
+	insere_valor_pac(pacote,ponto,'d',5);
+	insere_valor_pac(pacote,ponto,'l',5);
+	insere_valor_pac(pacote,ponto,'c',6);
+	insere_valor_pac(pacote,ponto,'p',4);
 	
 	ponto=3;
-	insere_valor_pac(pacote,ponto,'N',4);
-	insere_valor_pac(pacote,ponto,'B',3);
+	insere_valor_pac(pacote,ponto,'n',4);
+	insere_valor_pac(pacote,ponto,'b',3);
 	//insere_valor_pac(pacote,ponto,'c',2);
 	
 	ponto=4;
-	insere_valor_pac(pacote,ponto,'F',2);
-	insere_valor_pac(pacote,ponto,'G',2);
-	insere_valor_pac(pacote,ponto,'H',2);
-	insere_valor_pac(pacote,ponto,'V',2);
+	insere_valor_pac(pacote,ponto,'f',2);
+	insere_valor_pac(pacote,ponto,'g',2);
+	insere_valor_pac(pacote,ponto,'h',2);
+	insere_valor_pac(pacote,ponto,'v',2);
 	
 	ponto=5;
-	insere_valor_pac(pacote,ponto,'J',2);
+	insere_valor_pac(pacote,ponto,'j',2);
 	
 	ponto=6;
-	insere_valor_pac(pacote,ponto,'Q',1);
+	insere_valor_pac(pacote,ponto,'q',1);
 	
 	ponto=8;
-	insere_valor_pac(pacote,ponto,'X',1);
-	insere_valor_pac(pacote,ponto,'Z',1);
+	insere_valor_pac(pacote,ponto,'x',1);
+	insere_valor_pac(pacote,ponto,'z',1);
 
 	return pacote;
 
