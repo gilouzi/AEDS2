@@ -94,7 +94,7 @@ trie_t *inicia_dicionario(FILE *arq){
 
   while (fscanf(arq, "%s\n", palavra) != EOF){
 
-    printf("lido: %s\n",palavra);
+    //printf("lido: %s\n",palavra);
 
     insere_palavra(palavra,trie);
 
@@ -161,22 +161,16 @@ void chamada_busca(trie_t *trie) {
 void destroy_trie(trie_node_t *node){
 
   if(node == NULL)
-    return;
-  printf("destroy\n");
-  for(int i = 0; i<ALPHABET_SIZE; i++){
-    if(node[i].filho != NULL){
-      node = node[i].filho;
-      destroy_trie(node);
-    }
-  }
-  free(node);
+        return;
+
+    for(int i = 0; i < ALPHABET_SIZE; i++)
+        destroy_trie(node[i].filho);
+
+    free(node);
 }
 
 void destroy_dicionario(trie_t *trie){
-  printf("destroy 1\n");
   trie_node_t *node = trie->firstLevel;
-  //destroy_trie(node);
-  printf("destroy 2\n");
+  destroy_trie(node);
   free(trie);
-  printf("destroy 3\n");
 }
