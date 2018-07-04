@@ -250,22 +250,49 @@ int main(int argc, char const *argv[]){
 
 */
 
-  //testar se jogada esta funcionando
+  //testar se inicia dicionario esta funcionando
+
+/*
+  FILE *arq = fopen("palavras_validas.txt", "r");
+
+    trie_t *trie = inicia_dicionario(arq);
+    chamada_busca(trie);
+
+    fclose(arq);
+*/
+
+
+  //testar se formar_palavra esta funcionando
 
   FILE *arq = fopen("palavras_validas_teste.txt", "r");
+
+  jogo_t *jogo = inicio_jogo(arq);
+
+  formar_palavra(jogo);
+  formar_palavra(jogo);
+
+  destroy_jogo(jogo);
+
+  fclose(arq);
+
+
+  //testar se jogada esta funcionando
+
+ /* 
+ FILE *arq = fopen("palavras_validas_teste.txt", "r");
 
   jogo_t *jogo = inicio_jogo(arq);
   printf("Jogo iniciado\n");
   int a=0;
   while (a==0){
-    jogada(jogo);
+    jogada(jogo,arq);
     //a++;
   } 
   destroy_jogo(jogo);
 
   fclose(arq);
   
-
+*/
 
 	return 0;
 }

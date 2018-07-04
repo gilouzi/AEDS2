@@ -48,10 +48,11 @@ void insere_jogador(jogo_t *jogo);
 void def_quant_jog (jogo_t *jogo);
 void trocar_todas_pecas(jogo_t *jogo);
 void trocar_peca(jogo_t *jogo);
+void add_palavra(char sentido, int x, int y, jogo_t *jogo);
 void formar_palavra(jogo_t *jogo);
 void pular_vez(jogo_t *jogo);
 void fim_jogo(jogo_t *jogo);
-void jogada(jogo_t *jogo);
+void jogada(jogo_t *jogo, FILE *arq);
 void destroy_suporte(jogador_t *jogador);
 void destroy_jogo(jogo_t *jogo);
 

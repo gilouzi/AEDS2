@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 
 #include "saco.h"
 #include "jogadas.h"
@@ -29,7 +30,7 @@ jogo_t *cria_jogo(saco_t *Saco, FILE *arq){
 	jogo->saco = Saco;
 	jogo->pula_vez=0;
 	inicia_tabuleiro(jogo->tabuleiro);
-	//jogo->dicionario = inicia_dicionario(arq);
+	jogo->dicionario = inicia_dicionario(arq);
 	return jogo;
 }
 
@@ -176,34 +177,90 @@ void trocar_peca(jogo_t *jogo){
 
 }
 
-void add_palavra(char *l, char *sentido, int pos[][]){
+void add_palavra(char sentido, int x, int y, jogo_t *jogo){
 
-	if(posicao == ocupada){
-		palavra[i]=posicao;
-		posicao++ no sentido sent;
-	}
-	else{
-		printf("Escolha qual letra colocara na posicao atual %c %d\n", );
-		scanf("%c", letra);
-		inserir_letra_posicao();
-	}
+	int novo[7] = {0}; //vetor que vai guardar em quais posicoes foram colocadas as novas pecas
+	int i = 0;
+	char palavra[16];
+	char letra;
+	int d = 0;
+
+	printf("Posicao: %c %d , sentido: %c\n",x+97,y,sentido);
+
+		for(int j=0; j<7; j++){
+
+			if(jogo->tabuleiro[y][x] != '-'){ //ja tem uma letra inserida na posicao
+				palavra[i] = jogo->tabuleiro[y][x];
+			}
+
+			else{
+				printf("Escolha qual letra colocara na posicao atual %c %d\n",x+97,y);
+				scanf(" %c",&letra);
+				jogo->tabuleiro[y][x] = letra;
+				palavra[i] = letra;
+				if(sentido == 'v'){ //se o sentido for pra baixo, a proxima posicao ira pra baixo
+					novo[d] = y;
+					d++;
+				}
+				else if(sentido == '>'){ //caso o sentido for para o lado
+					novo[d] = x;
+					d++;
+				}
+			}
+
+			if(sentido == 'v'){ //se o sentido for pra baixo, a proxima posicao ira pra baixo
+				y++;
+			}
+			else if(sentido == '>'){ //caso o sentido for para o lado
+				x++;
+			}
+
+			i++;
+
+			imprime_tabuleiro(jogo->tabuleiro);
+		}
+
+		printf("%s\n",palavra);
+		for(int j=0; j<d; j++){
+			printf("%d ",novo[j]);
+		}
+		printf("\n");
 
 }
 
 void formar_palavra(jogo_t *jogo){
 	jogo->pula_vez=0;
 	printf("Escolha a posicao de inicio da palavra no formato a 0\n");
+	//printf("Escolha a posicao de inicio da palavra no formato x y \n");
 
-	char x;
+	//char *pos;
+	char sent;
+	char xx;
+	int x;
 	int y;
 
-	scanf("%c %d",x,&y);
+	//scanf("%s",pos);
+	scanf(" %c %d",&xx, &y);
+	//printf("lido %c %c\n",pos[0],pos[1]);
+
+	x = xx-97;
+
+	printf("Posicao: %d %d\n",x,y);
+	//printf("Posicao: %d %d , sentido:\n",x,y);
+
 
 	printf("Escolha o sentido que a palavra sera formada: > ou v\n");
 
-	char sent;
+	scanf(" %c",&sent);
 
-	scanf("%c",sent);
+	printf("lido %c\n",sent);
+
+	printf("Posicao: %d %d , sentido: %c\n",x,y,sent);
+	//printf("Posicao: %c %d , sentido: %s\n",x+97,y,sent);
+
+	//int xx = x[0]+97;
+	add_palavra(sent,x,y,jogo);
+	//chamada_busca(jogo->dicionario);
 
 
 }
@@ -219,7 +276,7 @@ void pular_vez(jogo_t *jogo){
 
 
 
-void jogada(jogo_t *jogo) {
+void jogada(jogo_t *jogo, FILE *arq) {
 	printf("Jogador %d sua vez de jogar\n",jogo->atual->jogador_num);
 
 	imprime_tabuleiro(jogo->tabuleiro);
@@ -255,6 +312,7 @@ void jogada(jogo_t *jogo) {
 				pular_vez(jogo);
 			else if(opt==0){
 				destroy_jogo(jogo);
+				fclose(arq);
 				exit(1);
 			}
 			else{
@@ -282,6 +340,7 @@ void jogada(jogo_t *jogo) {
 				trocar_peca(jogo);
 			else if(opt==0){
 				destroy_jogo(jogo);
+				fclose(arq);
 				exit(1);
 			}
 			else{
@@ -313,6 +372,7 @@ void jogada(jogo_t *jogo) {
 			trocar_todas_pecas(jogo);
 		else if(opt==0){
 			destroy_jogo(jogo);
+			fclose(arq);
 			exit(1);
 		}
 		else{
@@ -345,7 +405,7 @@ void destroy_suporte(jogador_t *jogador){ 								//isso ta dando free de verdad
 
 void destroy_jogo(jogo_t *jogo){
 	destroy_saco (jogo->saco);
-	//destroy_dicionario (jogo->dicionario);
+	destroy_dicionario (jogo->dicionario);
 
 	jogador_t *toVisit = jogo -> inicio;
 	jogador_t *toFree;
