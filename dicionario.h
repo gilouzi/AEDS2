@@ -17,7 +17,7 @@ trie_t *cria_trie();
 trie_node_t *cria_node();
 void insere_palavra_rest(char *palavra, trie_t *trie, int i, trie_node_t *node);
 void insere_palavra(char *palavra, trie_t *trie);
-void inicia_dicionario(FILE *arq);
+trie_t *inicia_dicionario(FILE *arq);
 int busca(trie_t *trie, char *palavra);
 void chamada_busca(trie_t *trie);
 void destroy_trie(trie_node_t *node);

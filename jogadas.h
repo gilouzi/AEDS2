@@ -1,6 +1,7 @@
 #ifndef JOGADAS_H
 #define JOGADAS_H
 
+
 #include "saco.h"
 #include "dicionario.h"
 
@@ -38,12 +39,13 @@ typedef struct{
   trie_t *dicionario;
 } jogo_t;
 
-jogo_t *cria_jogo(saco_t *saco);
+
+jogo_t *inicio_jogo (FILE *arq);
+jogo_t *cria_jogo(saco_t *Saco, FILE *arq);
 void inicia_tabuleiro(char tabuleiro[15][15]);
 void imprime_tabuleiro(char tabuleiro[15][15]);
 void insere_jogador(jogo_t *jogo);
-jogo_t *def_quant_jog (saco_t *saco);
-jogo_t *inicio_jogo ();
+void def_quant_jog (jogo_t *jogo);
 void trocar_todas_pecas(jogo_t *jogo);
 void trocar_peca(jogo_t *jogo);
 void formar_palavra(jogo_t *jogo);

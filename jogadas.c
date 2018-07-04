@@ -4,8 +4,18 @@
 
 #include "saco.h"
 #include "jogadas.h"
+#include "dicionario.h"
 
-jogo_t *cria_jogo(saco_t *Saco){
+
+
+jogo_t *inicio_jogo (FILE *arq) { //iniciar o jogo
+	saco_t *saco = inicializar_saco();
+	jogo_t *jogo = cria_jogo(saco,arq);
+	def_quant_jog(jogo);
+	return jogo;
+}
+
+jogo_t *cria_jogo(saco_t *Saco, FILE *arq){
 	jogo_t *jogo = (jogo_t *) malloc(sizeof(jogo_t));
 	if (jogo == NULL)
 	{
@@ -16,9 +26,10 @@ jogo_t *cria_jogo(saco_t *Saco){
 	jogo->fim = NULL;
 	jogo->atual = NULL;
 	jogo->num_jogadores=0;
-	jogo->saco=Saco;
+	jogo->saco = Saco;
 	jogo->pula_vez=0;
 	inicia_tabuleiro(jogo->tabuleiro);
+	jogo->dicionario = inicia_dicionario(arq);
 	return jogo;
 }
 
@@ -26,6 +37,21 @@ void inicia_tabuleiro(char tabuleiro[15][15]){
 	for (int i = 0; i<15; i++)
 		for (int j = 0; j<15; j++)
 			tabuleiro[i][j]='-';
+}
+
+void def_quant_jog (jogo_t *jogo) { //definir quantas pessoas vao jogar (2 a 4)
+	int jog;
+	printf("Digite a quantidade de jogadores de 2 a 4\n");
+	scanf("%d", &jog);
+	if(jog>=2 && jog<=4) {
+		while (jogo->num_jogadores != jog){
+			insere_jogador(jogo);
+		}
+	}
+	else{
+		printf("Erro, quantidade de jogadores nao disponivel\n");
+		return;
+	}
 }
 
 void imprime_tabuleiro(char tabuleiro[15][15]){
@@ -102,35 +128,6 @@ void insere_jogador(jogo_t *jogo){  //inserir jogador em jogo
 
 }
 
-
-
-jogo_t *def_quant_jog (saco_t *saco) { //definir quantas pessoas vao jogar (2 a 4)
-	int jog;
-	printf("Digite a quantidade de jogadores de 2 a 4\n");
-	scanf("%d", &jog);
-	jogo_t *jogo = cria_jogo(saco);
-	if(jog>=2 && jog<=4) {
-		while (jogo->num_jogadores != jog){
-			insere_jogador(jogo);
-		}
-	}
-	else{
-		printf("Erro, quantidade de jogadores nao disponivel\n");
-		exit(1);
-	}
-	return jogo;
-}
-
-
-
-jogo_t *inicio_jogo () { //iniciar o jogo
-	saco_t *saco = inicializar_saco();
-	jogo_t *jogo = def_quant_jog(saco);
-	return jogo;
-}
-
-
-
 void trocar_todas_pecas(jogo_t *jogo){
 	jogo->pula_vez=0;
 }
@@ -183,6 +180,7 @@ void trocar_peca(jogo_t *jogo){
 
 void formar_palavra(jogo_t *jogo){
 	jogo->pula_vez=0;
+	printf("Escolha a posicao de inicio da palavra no formato A0\n");
 
 }
 
@@ -200,7 +198,7 @@ void pular_vez(jogo_t *jogo){
 void jogada(jogo_t *jogo) {
 	printf("Jogador %d sua vez de jogar\n",jogo->atual->jogador_num);
 
-	printf("Suas pedras são:\n");
+	/*printf("Suas pedras são:\n");
 	int i = 0;
     for (int d = 0; d < 7; d++){
     	if(jogo->atual->suporte[d]->letra != '0'){
@@ -286,7 +284,7 @@ void jogada(jogo_t *jogo) {
 	if(jogo->atual != jogo->fim)
 		jogo->atual = jogo->atual->prox;
 	else
-		jogo->atual = jogo->inicio;
+		jogo->atual = jogo->inicio;*/
 
 }
 
@@ -298,7 +296,7 @@ void fim_jogo(jogo_t *jogo) {
 }
 
 
-void destroy_suporte(jogador_t *jogador){ 								//isso da dando free de verdade??????
+void destroy_suporte(jogador_t *jogador){ 								//isso ta dando free de verdade??????
 	for(int i = 0; i<7; i++)
 	free(jogador->suporte[i]);
 }
@@ -307,6 +305,7 @@ void destroy_suporte(jogador_t *jogador){ 								//isso da dando free de verdad
 
 void destroy_jogo(jogo_t *jogo){
 	destroy_saco (jogo->saco);
+	destroy_dicionario (jogo->dicionario);
 
 	jogador_t *toVisit = jogo -> inicio;
 	jogador_t *toFree;

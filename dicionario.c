@@ -87,18 +87,21 @@ void insere_palavra(char *palavra, trie_t *trie){
 }
 
 
-void inicia_dicionario(FILE *arq){
+trie_t *inicia_dicionario(FILE *arq){
 
   trie_t *trie = cria_trie();
   char palavra[1040];
 
   while (fscanf(arq, "%s\n", palavra) != EOF){
 
-    //printf("lido: %s\n",palavra);
+    printf("lido: %s\n",palavra);
 
     insere_palavra(palavra,trie);
 
   }
+
+  return trie;
+
 }
 
 int busca(trie_t *trie, char *palavra){
@@ -113,7 +116,7 @@ int busca(trie_t *trie, char *palavra){
     if(node[pos].letra == '0' || node[pos].filho == NULL)
       return 0;
 
-    printf("encontrado %c\n",node[pos].letra);
+    //printf("encontrado %c\n",node[pos].letra);
     node = node[pos].filho;
     i++;
   }
@@ -156,6 +159,10 @@ void chamada_busca(trie_t *trie) {
 }
 
 void destroy_trie(trie_node_t *node){
+
+  if(node == NULL)
+    return;
+  printf("destroy\n");
   for(int i = 0; i<ALPHABET_SIZE; i++){
     if(node[i].filho != NULL){
       node = node[i].filho;
@@ -166,7 +173,10 @@ void destroy_trie(trie_node_t *node){
 }
 
 void destroy_dicionario(trie_t *trie){
+  printf("destroy 1\n");
   trie_node_t *node = trie->firstLevel;
-  destroy_trie(node);
+  //destroy_trie(node);
+  printf("destroy 2\n");
   free(trie);
+  printf("destroy 3\n");
 }

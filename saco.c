@@ -244,6 +244,7 @@ void destroy_saco (saco_t *saco) {
 		free(toFree);
 	}
 	free(saco);
+	printf("saco destruido\n");
 }
 
 void destroy_pacote (pacote_t *pacote) {
