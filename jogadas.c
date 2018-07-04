@@ -29,7 +29,7 @@ jogo_t *cria_jogo(saco_t *Saco, FILE *arq){
 	jogo->saco = Saco;
 	jogo->pula_vez=0;
 	inicia_tabuleiro(jogo->tabuleiro);
-	jogo->dicionario = inicia_dicionario(arq);
+	//jogo->dicionario = inicia_dicionario(arq);
 	return jogo;
 }
 
@@ -57,10 +57,10 @@ void def_quant_jog (jogo_t *jogo) { //definir quantas pessoas vao jogar (2 a 4)
 void imprime_tabuleiro(char tabuleiro[15][15]){
 	printf("  |");
 	for(int i=0; i<15; i++){
-		if(i<10)
-			printf("%d |",i);
-		else
-			printf("%d|",i);
+		//if(i<10)
+			printf("%c |",i+97);
+		//else
+			//printf("%d|",i);
 	}
 	printf("\n");
 	for (int i = 0; i<15; i++){
@@ -176,11 +176,35 @@ void trocar_peca(jogo_t *jogo){
 
 }
 
+void add_palavra(char *l, char *sentido, int pos[][]){
 
+	if(posicao == ocupada){
+		palavra[i]=posicao;
+		posicao++ no sentido sent;
+	}
+	else{
+		printf("Escolha qual letra colocara na posicao atual %c %d\n", );
+		scanf("%c", letra);
+		inserir_letra_posicao();
+	}
+
+}
 
 void formar_palavra(jogo_t *jogo){
 	jogo->pula_vez=0;
-	printf("Escolha a posicao de inicio da palavra no formato A0\n");
+	printf("Escolha a posicao de inicio da palavra no formato a 0\n");
+
+	char x;
+	int y;
+
+	scanf("%c %d",x,&y);
+
+	printf("Escolha o sentido que a palavra sera formada: > ou v\n");
+
+	char sent;
+
+	scanf("%c",sent);
+
 
 }
 
@@ -198,7 +222,9 @@ void pular_vez(jogo_t *jogo){
 void jogada(jogo_t *jogo) {
 	printf("Jogador %d sua vez de jogar\n",jogo->atual->jogador_num);
 
-	/*printf("Suas pedras são:\n");
+	imprime_tabuleiro(jogo->tabuleiro);
+
+	printf("Suas pedras são:\n");
 	int i = 0;
     for (int d = 0; d < 7; d++){
     	if(jogo->atual->suporte[d]->letra != '0'){
@@ -217,6 +243,7 @@ void jogada(jogo_t *jogo) {
     		printf("As pecas acabaram, cada jogador tera mais uma chance de jogada\n");
     		printf("Para formar uma palavra digite 1\n");
 			printf("Para pular sua vez digite 2\n");
+			printf("Para sair do jogo digite 0\n");
 
 			int opt;
 
@@ -226,9 +253,13 @@ void jogada(jogo_t *jogo) {
 				formar_palavra(jogo);
 			else if(opt==2)
 				pular_vez(jogo);
+			else if(opt==0){
+				destroy_jogo(jogo);
+				exit(1);
+			}
 			else{
 				printf("ERRO: OPCAO INVALIDA\n");
-				exit(1);
+				return;
 			}
     	}
 
@@ -237,6 +268,7 @@ void jogada(jogo_t *jogo) {
     		printf("Para formar uma palavra digite 1\n");
 			printf("Para pular sua vez digite 2\n");
 			printf("Para trocar apenas uma pedra digite 3\n");
+			printf("Para sair do jogo digite 0\n");
 
 			int opt;
 
@@ -248,9 +280,13 @@ void jogada(jogo_t *jogo) {
 				pular_vez(jogo);
 			else if(opt==3)
 				trocar_peca(jogo);
+			else if(opt==0){
+				destroy_jogo(jogo);
+				exit(1);
+			}
 			else{
 				printf("ERRO: OPCAO INVALIDA\n");
-				exit(1);
+				return;
 			}
     	}
 
@@ -261,6 +297,7 @@ void jogada(jogo_t *jogo) {
 		printf("Para pular sua vez digite 2\n");
 		printf("Para trocar apenas uma pedra digite 3\n");
 		printf("Para trocar todas as suas pedras digite 4\n");
+		printf("Para sair do jogo digite 0\n");
 
 		int opt;
 
@@ -274,17 +311,20 @@ void jogada(jogo_t *jogo) {
 			trocar_peca(jogo);
 		else if(opt==4)
 			trocar_todas_pecas(jogo);
-
+		else if(opt==0){
+			destroy_jogo(jogo);
+			exit(1);
+		}
 		else{
 			printf("ERRO: OPCAO INVALIDA\n");
-			exit(1);
+			return;
 		}
     }
 
 	if(jogo->atual != jogo->fim)
 		jogo->atual = jogo->atual->prox;
 	else
-		jogo->atual = jogo->inicio;*/
+		jogo->atual = jogo->inicio;
 
 }
 
@@ -305,7 +345,7 @@ void destroy_suporte(jogador_t *jogador){ 								//isso ta dando free de verdad
 
 void destroy_jogo(jogo_t *jogo){
 	destroy_saco (jogo->saco);
-	destroy_dicionario (jogo->dicionario);
+	//destroy_dicionario (jogo->dicionario);
 
 	jogador_t *toVisit = jogo -> inicio;
 	jogador_t *toFree;

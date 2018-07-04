@@ -257,10 +257,10 @@ int main(int argc, char const *argv[]){
   jogo_t *jogo = inicio_jogo(arq);
   printf("Jogo iniciado\n");
   int a=0;
-  /*while (a==0){
+  while (a==0){
     jogada(jogo);
-    a++;
-  } */
+    //a++;
+  } 
   destroy_jogo(jogo);
 
   fclose(arq);
