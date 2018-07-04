@@ -195,7 +195,20 @@ void add_palavra(char sentido, int x, int y, jogo_t *jogo){
 
 			else{
 				printf("Escolha qual letra colocara na posicao atual %c %d\n",x+97,y);
+				printf("Se tiver finalizado a jogada, digite 0\n");
 				scanf(" %c",&letra);
+				if(letra == '0'){
+					printf("palavra %s\n",palavra);
+					int b = busca(jogo->dicionario,palavra);
+					if(b == 1){
+						printf("Palavra %s existe\n",palavra);
+						return;
+					}
+					else{
+						printf("Palavra %s nao existe\n",palavra);
+						return;
+					}
+				}
 				jogo->tabuleiro[y][x] = letra;
 				palavra[i] = letra;
 				if(sentido == 'v'){ //se o sentido for pra baixo, a proxima posicao ira pra baixo
@@ -226,28 +239,36 @@ void add_palavra(char sentido, int x, int y, jogo_t *jogo){
 		}
 		printf("\n");
 
+		int b = busca(jogo->dicionario,palavra);
+		if(b == 1){
+			printf("Palavra %s existe\n",palavra);
+			return;
+		}
+		else{
+			printf("Palavra %s nao existe\n",palavra);
+			return;
+		}
+
+
+
+
+
 }
 
 void formar_palavra(jogo_t *jogo){
 	jogo->pula_vez=0;
 	printf("Escolha a posicao de inicio da palavra no formato a 0\n");
-	//printf("Escolha a posicao de inicio da palavra no formato x y \n");
-
-	//char *pos;
+	
 	char sent;
 	char xx;
 	int x;
 	int y;
 
-	//scanf("%s",pos);
 	scanf(" %c %d",&xx, &y);
-	//printf("lido %c %c\n",pos[0],pos[1]);
 
 	x = xx-97;
 
 	printf("Posicao: %d %d\n",x,y);
-	//printf("Posicao: %d %d , sentido:\n",x,y);
-
 
 	printf("Escolha o sentido que a palavra sera formada: > ou v\n");
 
@@ -256,13 +277,9 @@ void formar_palavra(jogo_t *jogo){
 	printf("lido %c\n",sent);
 
 	printf("Posicao: %d %d , sentido: %c\n",x,y,sent);
-	//printf("Posicao: %c %d , sentido: %s\n",x+97,y,sent);
 
-	//int xx = x[0]+97;
 	add_palavra(sent,x,y,jogo);
-	//chamada_busca(jogo->dicionario);
-
-
+	
 }
 
 
