@@ -311,12 +311,18 @@ void add_palavra(char sentido, int x, int y, jogo_t *jogo){ //vai colocar as pec
 				printf("Se tiver finalizado a jogada, digite 0\n");
 				scanf("%d",&pos_letra);
 
+
 				if(pos_letra == 0){
 					teste_palavra (jogo,novas_pecas,ins,palavra,sentido,x,y,pos_novo);
 					return;
 				}
 
-				else{ 
+				if(pos_letra < 0 || pos_letra > 7) {
+					printf("Essa posicao nao existe, tente de novo\n");
+					j--;
+				}
+
+				else if (jogo->atual->suporte[pos_letra - 1]->letra != '-') { 
 					jogo->tabuleiro[y][x] = jogo->atual->suporte[pos_letra - 1]->letra;
 					palavra[cont_palavra] = jogo->atual->suporte[pos_letra - 1]->letra;
 					novas_pecas[ins].letra = jogo->atual->suporte[pos_letra - 1]->letra;
