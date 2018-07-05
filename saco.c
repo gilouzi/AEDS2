@@ -231,6 +231,7 @@ saco_t *inicializar_saco(){ //colocar todas as pecas disponiveis de forma aleato
 peca_t *remove_saco(saco_t *saco) { //remove primeira peca do saco
 	peca_t *toRemove = saco->inicio;
 	saco->inicio = toRemove->prox;
+	saco->num_elementos--;
 	return toRemove;
 }
 

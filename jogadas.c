@@ -145,6 +145,7 @@ void trocar_peca(jogo_t *jogo){
 
 	else{
 		int pos = rand() % jogo->saco->num_elementos;
+		printf("rand = %d\n",pos);
 		int pos_letra;
 
 		printf("Digite o numero que indica a posicao da letra que voce deseja trocar: \n");
@@ -176,7 +177,7 @@ void trocar_peca(jogo_t *jogo){
 		}
 
 		jogo->atual->suporte[pos_letra - 1] = remove_saco(jogo->saco);
-		jogo->saco->num_elementos--;
+		jogo->saco->num_elementos++;
 	}
 
 }
@@ -194,7 +195,6 @@ void teste_palavra (jogo_t *jogo, peca_t novas_pecas[7], int ins, char palavra[1
 					jogo->atual->suporte[v] = remove_saco(jogo->saco);
 				}	
 			}
-			jogo->saco->num_elementos = jogo->saco->num_elementos-ins;
 			return;
 		}
 		else{ //palavra nao existe
@@ -357,15 +357,12 @@ void jogada(jogo_t *jogo, FILE *arq) {
 	imprime_tabuleiro(jogo->tabuleiro);
 
 	printf("Suas pedras são:\n");
-	int i = 0;
+	//int i = 0;
     for (int d = 0; d < 7; d++){
-    	if(jogo->atual->suporte[d]->letra != '-'){
-    		printf("%c ",jogo->atual->suporte[d]->letra);
-    		i++;
-    	}
+    	printf("%c ",jogo->atual->suporte[d]->letra);
     }
     printf("\n");
-    for (int d = 0; d < i; d++){
+    for (int d = 0; d < 7; d++){
       printf("%d ",d+1);
     }
     printf("\n");

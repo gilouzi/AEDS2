@@ -184,48 +184,60 @@ int main(int argc, char const *argv[]){
 
 
     //teste se trocar_peca esta funcionando
-/*
+
+
+  FILE *arq = fopen("palavras_validas_teste.txt", "r");
+
+  jogo_t *jogo = inicio_jogo(arq);
+
   int a = 1;
   while (a==1) {
-    printf("Jogador %d sua vez de jogar\n",jogo->atual->jogador_num);
 
     printf("Suas pedras são:\n");
+
+    for (int v=0; v<7; v++){
+      printf("%c ",jogo->atual->suporte[v]->letra);
+    }
+    printf("\n");
+
+    for (int v=0; v<7; v++){
+      printf("%d ",v+1);
+    }
+    printf("\n");
+    
+
+    printf("Saco:\n");
+
     int i = 0;
 
-      for (int d = 0; d < 7; d++){
-        if(jogo->atual->suporte[d]->letra != '-'){
-          printf("%c ",jogo->atual->suporte[d]->letra);
-          i++;
-        }
-      }
-      printf("\n");
-      for (int d = 0; d < i; d++){
-        printf("%d ",d+1);
-      }
-      printf("\n");
+    peca_t *toVisit = jogo->saco->inicio;
+    while (toVisit != NULL) {
+      printf("%c ",toVisit->letra);
+      toVisit = toVisit->prox;
+      printf("%d \n",i);
+      i++;
+    }
+    printf("\n");
 
-      printf("Saco:\n");
 
-      peca_t *toVisit = jogo->saco->inicio;
-      while (toVisit != NULL) {
-        printf("%c ",toVisit->letra);
-        toVisit = toVisit->prox;
-      }
-      printf("\n");
 
-      toVisit = jogo->saco->inicio;
-      while (toVisit != NULL) {
-        printf("%d ",toVisit->ponto);
-        toVisit = toVisit->prox;
-      } 
-      printf("\n");     
+    toVisit = jogo->saco->inicio;
+    /*while (toVisit != NULL) {
+      printf("%d ",toVisit->ponto);
+      toVisit = toVisit->prox;
+    } 
+    printf("\n"); */    
 
-      trocar_peca(jogo);
+    trocar_peca(jogo);
 
-      printf("Para continuar testando digite 1\n");
-      scanf("%d", &a);
+    printf("Para continuar testando digite 1\n");
+    scanf("%d", &a);
   }
-*/
+
+  destroy_jogo(jogo);
+
+  fclose(arq);
+
 
 
     //testar se dicionario esta funcionando
@@ -278,7 +290,7 @@ int main(int argc, char const *argv[]){
 
   //testar se jogada esta funcionando
 
-  
+/* 
  FILE *arq = fopen("palavras_validas_teste.txt", "r");
 
   jogo_t *jogo = inicio_jogo(arq);
@@ -291,7 +303,7 @@ int main(int argc, char const *argv[]){
   destroy_jogo(jogo);
 
   fclose(arq);
-  
+ */ 
 
 
 	return 0;
