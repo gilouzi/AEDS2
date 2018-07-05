@@ -224,6 +224,7 @@ void teste_palavra (jogo_t *jogo, peca_t novas_pecas[7], int ins, char palavra[1
 			for(int v=0; v<7; v++){
 				toFree = jogo->atual->suporte[v];
 				if(toFree->letra == '-'){
+					jogo->atual->jogador_pontos = jogo->atual->jogador_pontos + toFree->ponto;
 					free(toFree);
 					jogo->atual->suporte[v] = remove_saco(jogo->saco);
 				}	
@@ -400,6 +401,9 @@ void jogada(jogo_t *jogo, FILE *arq) {
     }
     printf("\n");
 
+    printf("Sua pontuacao eh:\n");
+    printf("%d\n",jogo->atual->jogador_pontos);
+
     if(jogo->saco->num_elementos < 7){
     	if (jogo->saco->num_elementos == 0){
     		printf("As pecas acabaram, cada jogador tera mais uma chance de jogada\n");
@@ -493,9 +497,54 @@ void jogada(jogo_t *jogo, FILE *arq) {
 
 }
 
+void imprime_ranking(jogo_t *jogo){
+	jogador_t *atual = jogo->inicio;
+	jogador_t *toComp = atual->prox;
+	jogador_t aux;
+	jogador_t *atual_aux = jogo->fim;
+
+	for(int i=0; i<jogo->num_jogadores; i++) {
+		while (toComp != atual_aux->prox) {
+			printf("toComp = %d\n",toComp->jogador_num);
+			if(atual->jogador_pontos > toComp->jogador_pontos){ //vai jogar a pontuacao menor pra direita
+				printf("pontuacao atual eh menor\n");
+				aux.jogador_pontos = toComp->jogador_pontos;
+				aux.jogador_num = toComp->jogador_num;
+				printf("aux %d pontos= %d\n",aux.jogador_num,aux.jogador_pontos);
+				toComp->jogador_pontos = atual->jogador_pontos;
+				toComp->jogador_num = atual->jogador_num;
+				atual->jogador_pontos = aux.jogador_pontos;
+				atual->jogador_num = aux.jogador_num;
+				toComp = toComp->prox;
+				atual = atual->prox;
+			}
+			else{
+				break;
+			}
+		}
+		atual = jogo->inicio;
+		toComp = atual->prox;
+		atual_aux = atual_aux->prev;
+	}
+
+
+	atual=jogo->fim;
+	int i=1;
+
+	printf("Vencedor é o jogador %d!\n",atual->jogador_num);
+	printf("Ranking:\n");
+
+	while(atual != NULL){
+		printf("%d- jogador %d com %d pontos\n",i,atual->jogador_num,atual->jogador_pontos);
+		atual=atual->prev;
+		i++;
+	}
+}
+
 
 void fim_jogo(jogo_t *jogo) {
 	printf("fim do jogo\n");
+	imprime_ranking(jogo);
 	destroy_jogo(jogo);
 	exit(1);
 }

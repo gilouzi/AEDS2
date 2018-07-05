@@ -185,7 +185,7 @@ int main(int argc, char const *argv[]){
 
     //teste se trocar_peca esta funcionando
 
-
+/*
   FILE *arq = fopen("palavras_validas_teste.txt", "r");
 
   jogo_t *jogo = inicio_jogo(arq);
@@ -231,7 +231,7 @@ int main(int argc, char const *argv[]){
   destroy_jogo(jogo);
 
   fclose(arq);
-
+*/
 
 
     //testar se dicionario esta funcionando
@@ -281,6 +281,25 @@ int main(int argc, char const *argv[]){
 
   fclose(arq);*/
 
+  //testar se imprime ranking esta funcionando
+
+  FILE *arq = fopen("palavras_validas_teste.txt", "r");
+
+  jogo_t *jogo = inicio_jogo(arq);
+  printf("Jogo iniciado\n");
+  int ponto;
+
+  while(jogo->atual != NULL){
+    scanf("%d", &ponto);
+    jogo->atual->jogador_pontos = ponto;
+    jogo->atual = jogo->atual->prox;
+  }
+  
+  
+  fim_jogo(jogo);
+
+  fclose(arq);
+
 
   //testar se jogada esta funcionando
 
@@ -297,7 +316,7 @@ int main(int argc, char const *argv[]){
   destroy_jogo(jogo);
 
   fclose(arq);
- */ 
+*/
 
 
 	return 0;

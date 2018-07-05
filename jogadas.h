@@ -52,6 +52,7 @@ void teste_palavra (jogo_t *jogo, peca_t novas_pecas[7], int ins, char palavra[1
 void add_palavra(char sentido, int x, int y, jogo_t *jogo);
 void formar_palavra(jogo_t *jogo);
 void pular_vez(jogo_t *jogo);
+void imprime_ranking(jogo_t *jogo);
 void fim_jogo(jogo_t *jogo);
 void jogada(jogo_t *jogo, FILE *arq);
 void destroy_suporte(jogador_t *jogador);
