@@ -50,8 +50,8 @@ void def_quant_jog (jogo_t *jogo) { //definir quantas pessoas vao jogar (2 a 4)
 		}
 	}
 	else{
-		printf("Erro, quantidade de jogadores nao disponivel\n");
-		return;
+		printf("Erro, quantidade de jogadores nao disponivel, tente de novo\n");
+		def_quant_jog(jogo);
 	}
 }
 
@@ -129,13 +129,13 @@ void insere_jogador(jogo_t *jogo){  //inserir jogador em jogo
 
 }
 
-void trocar_todas_pecas(jogo_t *jogo){
+void trocar_todas_pecas(jogo_t *jogo){ //inserir novas pecas no suporte e devolver as antigas de forma aleatoria
 	jogo->pula_vez=0;
 
 	for(int d=0; d<7; d++) {
 
 		int pos = rand() % jogo->saco->num_elementos;
-		printf("rand = %d\n",pos);
+		//printf("rand = %d\n",pos);
 
 		peca_t *toChange;
 		peca_t *novo = jogo->atual->suporte[d];
@@ -178,17 +178,25 @@ void trocar_peca(jogo_t *jogo){
 
 	else{
 		int pos = rand() % jogo->saco->num_elementos;
-		printf("rand = %d\n",pos);
+		//printf("rand = %d\n",pos);
 		int pos_letra;
 
 		printf("Digite o numero que indica a posicao da letra que voce deseja trocar: \n");
 
 		scanf("%d", &pos_letra);
+		if(pos_letra < 1 || pos_letra > 7) {
+			printf("Essa posicao nao existe, tente de novo\n");
+			trocar_peca(jogo);
+		}
 
-		peca_t *toChange;
 		peca_t *novo = jogo->atual->suporte[pos_letra - 1];
 		peca_t *aux_prev = jogo->saco->inicio;
 		peca_t *aux_prox = aux_prev->prox;
+
+		if(novo->letra == '-'){
+			printf("Essa peca nao pode ser trocada, tente de novo\n");
+			trocar_peca(jogo);
+		}
 
 		for(int i=0; i<pos; i++){
 			aux_prox = aux_prox->prox;
@@ -215,7 +223,7 @@ void trocar_peca(jogo_t *jogo){
 
 }
 
-void teste_palavra (jogo_t *jogo, peca_t novas_pecas[7], int ins, char palavra[16], char sentido, int x, int y, int pos_novo[7]) {
+void teste_palavra (jogo_t *jogo, peca_t novas_pecas[7], int ins, char palavra[16], char sentido, int x, int y, int pos_novo[7]) { //vai checar se a palavra formada existe
 
 	int b = busca(jogo->dicionario,palavra);
 		if(b == 1){ //palavra existe
@@ -263,7 +271,7 @@ void teste_palavra (jogo_t *jogo, peca_t novas_pecas[7], int ins, char palavra[1
 		}
 }
 
-void add_palavra(char sentido, int x, int y, jogo_t *jogo){
+void add_palavra(char sentido, int x, int y, jogo_t *jogo){ //vai colocar as pecas no tabuleiro
 
 	peca_t novas_pecas[7]; //vetor que vai guardar a informacao das pecas colocadas
 	int pos_novo[7];  //vetor que vai guardar em quais posicoes foram colocadas as novas pecas
@@ -331,9 +339,18 @@ void add_palavra(char sentido, int x, int y, jogo_t *jogo){
 
 			if(sentido == 'v'){ //se o sentido for pra baixo, a proxima posicao ira pra baixo
 				y++;
+				if(y>14){ //atingiu o fim do tabuleiro
+					teste_palavra (jogo,novas_pecas,ins,palavra,sentido,x,y,pos_novo);
+					return;
+				} 
+					
 			}
 			else if(sentido == '>'){ //caso o sentido for para o lado
 				x++;
+				if(x>14){
+					teste_palavra (jogo,novas_pecas,ins,palavra,sentido,x,y,pos_novo);
+					return;
+				} 
 			}
 
 		}
@@ -347,7 +364,7 @@ void add_palavra(char sentido, int x, int y, jogo_t *jogo){
 		printf("\n"); */
 }
 
-void formar_palavra(jogo_t *jogo){
+void formar_palavra(jogo_t *jogo){ //vai pegar as indicacoes para que uma palavra seja formada
 	jogo->pula_vez=0;
 	printf("Escolha a posicao de inicio da palavra no formato a 0\n");
 	
@@ -360,15 +377,30 @@ void formar_palavra(jogo_t *jogo){
 
 	x = xx-97;
 
+	if(x<0 || x>14){
+		printf("Essa posicao nao existe, tente novamente\n");
+		formar_palavra(jogo);
+	}
+
+	if(y<0 || y>14){
+		printf("Essa posicao nao existe, tente novamente\n");
+		formar_palavra(jogo);
+	}
+
 	//printf("Posicao: %d %d\n",x,y);
 
 	printf("Escolha o sentido que a palavra sera formada: > ou v\n");
 
 	scanf(" %c",&sent);
 
+	if(sent != 'v' && sent != '>'){
+		printf("Sentido nao existe, tente novamente\n");
+		formar_palavra(jogo);
+	}
+
 	//printf("lido %c\n",sent);
 
-	printf("Posicao: %d %d , sentido: %c\n",x,y,sent);
+	//printf("Posicao: %d %d , sentido: %c\n",x,y,sent);
 
 	add_palavra(sent,x,y,jogo);
 	
@@ -376,10 +408,11 @@ void formar_palavra(jogo_t *jogo){
 
 
 
-void pular_vez(jogo_t *jogo){
+void pular_vez(jogo_t *jogo, FILE *arq){
 	jogo->pula_vez++;
 	if(jogo->pula_vez == (jogo->num_jogadores)*2){
-		fim_jogo(jogo);
+		printf("Todos os jogadores pularam a vez por mais de duas rodadas\n");
+		fim_jogo(jogo, arq);
 	}
 }
 
@@ -387,6 +420,7 @@ void pular_vez(jogo_t *jogo){
 
 void jogada(jogo_t *jogo, FILE *arq) {
 	printf("Jogador %d sua vez de jogar\n",jogo->atual->jogador_num);
+	printf("Sua pontuacao eh: %d\n",jogo->atual->jogador_pontos);
 
 	imprime_tabuleiro(jogo->tabuleiro);
 
@@ -401,33 +435,36 @@ void jogada(jogo_t *jogo, FILE *arq) {
     }
     printf("\n");
 
-    printf("Sua pontuacao eh:\n");
-    printf("%d\n",jogo->atual->jogador_pontos);
 
     if(jogo->saco->num_elementos < 7){
     	if (jogo->saco->num_elementos == 0){
-    		printf("As pecas acabaram, cada jogador tera mais uma chance de jogada\n");
-    		printf("Para formar uma palavra digite 1\n");
-			printf("Para pular sua vez digite 2\n");
-			printf("Para sair do jogo digite 0\n");
+    		for(int i=0; i<jogo->num_jogadores; i++){
+    			printf("As pecas acabaram, cada jogador tera mais uma chance de jogada\n");
+	    		printf("Para formar uma palavra digite 1\n");
+				printf("Para pular sua vez digite 2\n");
+				printf("Para sair do jogo digite 0\n");
 
-			int opt;
+				int opt;
 
-			scanf("%d",&opt);
+				scanf("%d",&opt);
 
-			if(opt==1)
-				formar_palavra(jogo);
-			else if(opt==2)
-				pular_vez(jogo);
-			else if(opt==0){
-				destroy_jogo(jogo);
-				fclose(arq);
-				exit(1);
-			}
-			else{
-				printf("ERRO: OPCAO INVALIDA\n");
-				return;
-			}
+				if(opt==1)
+					formar_palavra(jogo);
+				else if(opt==2)
+					pular_vez(jogo,arq);
+				else if(opt==0){
+					fim_jogo(jogo,arq);
+				}
+				else{
+					printf("Opcao invalida, tente de novo\n");
+					jogada(jogo,arq);
+				}
+				if(jogo->atual != jogo->fim)
+					jogo->atual = jogo->atual->prox;
+				else
+					jogo->atual = jogo->inicio;
+    		}
+    		fim_jogo(jogo,arq);
     	}
 
     	else{
@@ -444,17 +481,15 @@ void jogada(jogo_t *jogo, FILE *arq) {
 			if(opt==1)
 				formar_palavra(jogo);
 			else if(opt==2)
-				pular_vez(jogo);
+				pular_vez(jogo,arq);
 			else if(opt==3)
 				trocar_peca(jogo);
 			else if(opt==0){
-				destroy_jogo(jogo);
-				fclose(arq);
-				exit(1);
+				fim_jogo(jogo,arq);
 			}
 			else{
-				printf("ERRO: OPCAO INVALIDA\n");
-				return;
+				printf("Opcao invalida, tente de novo\n");
+				jogada(jogo,arq);
 			}
     	}
 
@@ -474,19 +509,17 @@ void jogada(jogo_t *jogo, FILE *arq) {
 		if(opt==1)
 			formar_palavra(jogo);
 		else if(opt==2)
-			pular_vez(jogo);
+			pular_vez(jogo,arq);
 		else if(opt==3)
 			trocar_peca(jogo);
 		else if(opt==4)
 			trocar_todas_pecas(jogo);
 		else if(opt==0){
-			destroy_jogo(jogo);
-			fclose(arq);
-			exit(1);
+			fim_jogo(jogo,arq);
 		}
 		else{
-			printf("ERRO: OPCAO INVALIDA\n");
-			return;
+			printf("Opcao invalida, tente de novo\n");
+			jogada(jogo,arq);
 		}
     }
 
@@ -501,51 +534,53 @@ void imprime_ranking(jogo_t *jogo){
 	jogador_t *atual = jogo->inicio;
 	jogador_t *toComp = atual->prox;
 	jogador_t aux;
-	jogador_t *atual_aux = jogo->fim;
 
-	for(int i=0; i<jogo->num_jogadores; i++) {
-		while (toComp != atual_aux->prox) {
-			printf("toComp = %d\n",toComp->jogador_num);
-			if(atual->jogador_pontos > toComp->jogador_pontos){ //vai jogar a pontuacao menor pra direita
-				printf("pontuacao atual eh menor\n");
+	while (toComp != NULL) {
+		while (toComp != NULL) {
+			//printf("toComp = %d\n",toComp->jogador_num);
+			if(atual->jogador_pontos < toComp->jogador_pontos){ //vai jogar a pontuacao menor pra direita
+				//printf("pontuacao atual eh menor\n");
 				aux.jogador_pontos = toComp->jogador_pontos;
 				aux.jogador_num = toComp->jogador_num;
-				printf("aux %d pontos= %d\n",aux.jogador_num,aux.jogador_pontos);
+				//printf("aux %d pontos= %d\n",aux.jogador_num,aux.jogador_pontos);
 				toComp->jogador_pontos = atual->jogador_pontos;
 				toComp->jogador_num = atual->jogador_num;
 				atual->jogador_pontos = aux.jogador_pontos;
 				atual->jogador_num = aux.jogador_num;
 				toComp = toComp->prox;
-				atual = atual->prox;
 			}
 			else{
-				break;
+				toComp = toComp->prox;
 			}
 		}
-		atual = jogo->inicio;
+		atual = atual->prox;
 		toComp = atual->prox;
-		atual_aux = atual_aux->prev;
 	}
 
 
-	atual=jogo->fim;
+	atual=jogo->inicio;
 	int i=1;
 
 	printf("Vencedor é o jogador %d!\n",atual->jogador_num);
+	printf("\n");
 	printf("Ranking:\n");
+	printf("\n");
 
 	while(atual != NULL){
-		printf("%d- jogador %d com %d pontos\n",i,atual->jogador_num,atual->jogador_pontos);
-		atual=atual->prev;
+		printf("%d - jogador %d com %d pontos\n",i,atual->jogador_num,atual->jogador_pontos);
+		atual=atual->prox;
 		i++;
 	}
 }
 
 
-void fim_jogo(jogo_t *jogo) {
-	printf("fim do jogo\n");
+void fim_jogo(jogo_t *jogo, FILE *arq) {
+	printf("\n");
+	printf("Fim do jogo\n");
+	printf("\n");
 	imprime_ranking(jogo);
 	destroy_jogo(jogo);
+	fclose(arq);
 	exit(1);
 }
 

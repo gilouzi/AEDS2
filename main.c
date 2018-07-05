@@ -282,7 +282,7 @@ int main(int argc, char const *argv[]){
   fclose(arq);*/
 
   //testar se imprime ranking esta funcionando
-
+/*
   FILE *arq = fopen("palavras_validas_teste.txt", "r");
 
   jogo_t *jogo = inicio_jogo(arq);
@@ -296,15 +296,14 @@ int main(int argc, char const *argv[]){
   }
   
   
-  fim_jogo(jogo);
-
-  fclose(arq);
+  fim_jogo(jogo,arq);
+*/
 
 
   //testar se jogada esta funcionando
 
-/* 
- FILE *arq = fopen("palavras_validas_teste.txt", "r");
+ 
+ FILE *arq = fopen("palavras_validas.txt", "r");
 
   jogo_t *jogo = inicio_jogo(arq);
   printf("Jogo iniciado\n");
@@ -313,10 +312,8 @@ int main(int argc, char const *argv[]){
     jogada(jogo,arq);
     //a++;
   } 
-  destroy_jogo(jogo);
+  fim_jogo(jogo,arq);
 
-  fclose(arq);
-*/
 
 
 	return 0;
