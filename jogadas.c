@@ -177,48 +177,117 @@ void trocar_peca(jogo_t *jogo){
 
 }
 
+void teste_palavra (jogo_t *jogo, peca_t novas_pecas[7], int ins, char palavra[16], char sentido, int x, int y, int pos_novo[7]) {
+
+	int b = busca(jogo->dicionario,palavra);
+		if(b == 1){ //palavra existe
+			peca_t *toFree; //vai ter que trocar as pecas do suporte que foram utilizadas
+			printf("Palavra %s existe\n",palavra);
+			for(int v=0; v<7; v++){
+				toFree = jogo->atual->suporte[v];
+				if(toFree->letra == '-'){
+					free(toFree);
+					jogo->atual->suporte[v] = remove_saco(jogo->saco);
+				}	
+			}
+			return;
+		}
+		else{ //palavra nao existe
+			peca_t *toRedo; //vai ter que voltar as pecas que foram retiradas do suporte
+			printf("Palavra %s nao existe\n",palavra);
+			for(int v=0; v<7; v++){
+				toRedo = jogo->atual->suporte[v];
+				if(toRedo->letra == '-'){ //letra dessa posicao foi retirada
+					for(int k=0; k<ins; k++){
+						if(novas_pecas[k].ponto == toRedo->ponto && novas_pecas[k].letra != '-'){
+							toRedo->letra = novas_pecas[k].letra;
+							novas_pecas[k].letra = '-';
+							break;
+						}
+					}
+				}	
+			}
+			if(sentido == 'v'){ //se o sentido for pra baixo, vai excluir as letras que foram colocadas no tabuleiro
+				for(int v=0; v<ins; v++){
+					y=pos_novo[v];
+					jogo->tabuleiro[y][x] = '-';
+				}
+			}
+			else if(sentido == '>'){ //caso o sentido for para o lado
+				for(int v=0; v<ins; v++){
+					x=pos_novo[v];
+					jogo->tabuleiro[y][x] = '-';
+				}
+			}
+
+			return;
+		}
+}
+
 void add_palavra(char sentido, int x, int y, jogo_t *jogo){
 
-	int novo[7] = {0}; //vetor que vai guardar em quais posicoes foram colocadas as novas pecas
-	int i = 0;
-	char palavra[16];
-	char letra;
-	int d = 0;
+	peca_t novas_pecas[7]; //vetor que vai guardar a informacao das pecas colocadas
+	int pos_novo[7];  //vetor que vai guardar em quais posicoes foram colocadas as novas pecas
+	char palavra[16]; //palavra que vai ser criada
+	int cont_palavra = 0; //contador das letras da palavra
+	int pos_letra; //leitor da posicao da letra no suporte
+	int score = 0; //pontuacao feita pelo jogador
+	int ins = 0; //quantidade de insercoes feitas
+
+	for(int j=0; j<7; j++){
+		novas_pecas[j].letra = '-';
+		novas_pecas[j].ponto = 0;
+	}
 
 	printf("Posicao: %c %d , sentido: %c\n",x+97,y,sentido);
 
 		for(int j=0; j<7; j++){
 
+			imprime_tabuleiro(jogo->tabuleiro);
+			printf("Suas pedras são:\n");
+		    for (int v=0; v<7; v++){
+		    	printf("%c ",jogo->atual->suporte[v]->letra);
+		    }
+		    printf("\n");
+		    for (int v=0; v<7; v++){
+		      printf("%d ",v+1);
+		    }
+		    printf("\n");
+
 			if(jogo->tabuleiro[y][x] != '-'){ //ja tem uma letra inserida na posicao
-				palavra[i] = jogo->tabuleiro[y][x];
+				palavra[cont_palavra] = jogo->tabuleiro[y][x];
+				cont_palavra++;
 			}
 
 			else{
-				printf("Escolha qual letra colocara na posicao atual %c %d\n",x+97,y);
+				printf("Escolha qual letra colocara na posicao atual %c %d digitando a posicao dela no suporte\n",x+97,y);
 				printf("Se tiver finalizado a jogada, digite 0\n");
-				scanf(" %c",&letra);
-				if(letra == '0'){
-					printf("palavra %s\n",palavra);
-					int b = busca(jogo->dicionario,palavra);
-					if(b == 1){
-						printf("Palavra %s existe\n",palavra);
-						return;
+				scanf("%d",&pos_letra);
+
+				if(pos_letra == 0){
+					teste_palavra (jogo,novas_pecas,ins,palavra,sentido,x,y,pos_novo);
+					return;
+				}
+
+				else{ 
+					jogo->tabuleiro[y][x] = jogo->atual->suporte[pos_letra - 1]->letra;
+					palavra[cont_palavra] = jogo->atual->suporte[pos_letra - 1]->letra;
+					novas_pecas[ins].letra = jogo->atual->suporte[pos_letra - 1]->letra;
+					novas_pecas[ins].ponto = jogo->atual->suporte[pos_letra - 1]->ponto;
+					jogo->atual->suporte[pos_letra - 1]->letra = '-'; //indicar que removeu a letra do suporte (n por completo)
+
+					if(sentido == 'v'){ //se o sentido for pra baixo, a proxima posicao ira pra baixo
+						pos_novo[ins] = y; //guardar a posicao em que a peca que estava no suporte foi colocada
+						ins++;
 					}
-					else{
-						printf("Palavra %s nao existe\n",palavra);
-						return;
+					else if(sentido == '>'){ //caso o sentido for para o lado
+						pos_novo[ins] = x;
+						ins++;
 					}
+					cont_palavra++;	
 				}
-				jogo->tabuleiro[y][x] = letra;
-				palavra[i] = letra;
-				if(sentido == 'v'){ //se o sentido for pra baixo, a proxima posicao ira pra baixo
-					novo[d] = y;
-					d++;
-				}
-				else if(sentido == '>'){ //caso o sentido for para o lado
-					novo[d] = x;
-					d++;
-				}
+
+				
 			}
 
 			if(sentido == 'v'){ //se o sentido for pra baixo, a proxima posicao ira pra baixo
@@ -228,31 +297,15 @@ void add_palavra(char sentido, int x, int y, jogo_t *jogo){
 				x++;
 			}
 
-			i++;
-
-			imprime_tabuleiro(jogo->tabuleiro);
 		}
 
-		printf("%s\n",palavra);
-		for(int j=0; j<d; j++){
-			printf("%d ",novo[j]);
+		teste_palavra (jogo,novas_pecas,ins,palavra,sentido,x,y,pos_novo);
+
+		/*printf("%s\n",palavra);
+		for(int j=0; j<ins; j++){
+			printf("%d ",pos_novo[j]);
 		}
-		printf("\n");
-
-		int b = busca(jogo->dicionario,palavra);
-		if(b == 1){
-			printf("Palavra %s existe\n",palavra);
-			return;
-		}
-		else{
-			printf("Palavra %s nao existe\n",palavra);
-			return;
-		}
-
-
-
-
-
+		printf("\n"); */
 }
 
 void formar_palavra(jogo_t *jogo){
@@ -268,13 +321,13 @@ void formar_palavra(jogo_t *jogo){
 
 	x = xx-97;
 
-	printf("Posicao: %d %d\n",x,y);
+	//printf("Posicao: %d %d\n",x,y);
 
 	printf("Escolha o sentido que a palavra sera formada: > ou v\n");
 
 	scanf(" %c",&sent);
 
-	printf("lido %c\n",sent);
+	//printf("lido %c\n",sent);
 
 	printf("Posicao: %d %d , sentido: %c\n",x,y,sent);
 
@@ -301,7 +354,7 @@ void jogada(jogo_t *jogo, FILE *arq) {
 	printf("Suas pedras são:\n");
 	int i = 0;
     for (int d = 0; d < 7; d++){
-    	if(jogo->atual->suporte[d]->letra != '0'){
+    	if(jogo->atual->suporte[d]->letra != '-'){
     		printf("%c ",jogo->atual->suporte[d]->letra);
     		i++;
     	}
