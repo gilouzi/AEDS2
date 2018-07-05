@@ -201,7 +201,7 @@ saco_t *inicializar_saco(){ //colocar todas as pecas disponiveis de forma aleato
 	pacote_t *pacote = arruma_pacote();
 	//printf("pacote arrumado\n");
 	saco_t *saco = cria_saco();
-	int n = 24; //quantidade de nodes dentro do saco, ou de letras disponiveis
+	int n = 23; //quantidade de nodes dentro do saco, ou de letras disponiveis
 	srand(time(NULL));
 	while(saco->num_elementos<120) { //quantidade de pecas existentes
 		int pos = rand() % n;
