@@ -138,42 +138,46 @@ void trocar_todas_pecas(jogo_t *jogo){
 void trocar_peca(jogo_t *jogo){
 	jogo->pula_vez=0;
 
-	/*if(jogo->saco->num_elementos == 0) {
+	if(jogo->saco->num_elementos < 2) {
 		printf("Nao ha mais pecas para serem trocadas, selecione outra jogada\n");
-	}
-	int pos = rand() % jogo->saco->num_elementos;
-	printf("Digite o numero que indica a posicao da letra que voce deseja trocar: \n");
-	int num;
-	scanf("%d", &num);
-
-	int d = 0;
-	for(int i = 0; i < num-1; i++){
-		if(jogo->atual->suporte[d]->letra == '-')
-			while(jogo->atual->suporte[d]->letra == '-')
-				d++;
-		else
-			d++;
+		return;
 	}
 
-	if(jogo->atual->suporte[d]->letra == '-')
-		while(jogo->atual->suporte[d]->letra == '-')
-			d++;
+	else{
+		int pos = rand() % jogo->saco->num_elementos;
+		int pos_letra;
 
-	peca_t *troca;
-	troca->letra = jogo->atual->suporte[d]->letra;
-	troca->ponto = jogo->atual->suporte[d]->ponto;
+		printf("Digite o numero que indica a posicao da letra que voce deseja trocar: \n");
 
-	peca_t *aux = jogo->saco->inicio;
+		scanf("%d", &pos_letra);
 
-	for (int i = 0; i<pos; i++){
-		aux = aux->prox;
+		peca_t *toChange;
+		peca_t *novo = jogo->atual->suporte[pos_letra - 1];
+		peca_t *aux_prev = jogo->saco->inicio;
+		peca_t *aux_prox = aux_prev->prox;
+
+		for(int i=0; i<pos; i++){
+			aux_prox = aux_prox->prox;
+			aux_prev = aux_prev->prox;
+		}
+
+		if(aux_prox == NULL){
+			jogo->saco->fim = novo;
+			novo->prox = aux_prox;
+			novo->prev = aux_prev;
+			aux_prev->prox = novo;
+		}
+
+		else{
+			novo->prox = aux_prox;
+			novo->prev = aux_prev;
+			aux_prev->prox = novo;
+			aux_prox->prev = novo;
+		}
+
+		jogo->atual->suporte[pos_letra - 1] = remove_saco(jogo->saco);
+		jogo->saco->num_elementos--;
 	}
-
-	jogo->atual->suporte[d]->letra = aux->letra;
-	jogo->atual->suporte[d]->ponto = aux->ponto;
-	aux->letra = troca->letra;
-	aux->ponto = troca->ponto;
-	*/
 
 }
 
@@ -190,6 +194,7 @@ void teste_palavra (jogo_t *jogo, peca_t novas_pecas[7], int ins, char palavra[1
 					jogo->atual->suporte[v] = remove_saco(jogo->saco);
 				}	
 			}
+			jogo->saco->num_elementos = jogo->saco->num_elementos-ins;
 			return;
 		}
 		else{ //palavra nao existe

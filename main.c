@@ -264,7 +264,7 @@ int main(int argc, char const *argv[]){
 
   //testar se formar_palavra esta funcionando
 
-  FILE *arq = fopen("palavras_validas_teste.txt", "r");
+  /*FILE *arq = fopen("palavras_validas_teste.txt", "r");
 
   jogo_t *jogo = inicio_jogo(arq);
 
@@ -273,12 +273,12 @@ int main(int argc, char const *argv[]){
 
   destroy_jogo(jogo);
 
-  fclose(arq);
+  fclose(arq);*/
 
 
   //testar se jogada esta funcionando
 
- /* 
+  
  FILE *arq = fopen("palavras_validas_teste.txt", "r");
 
   jogo_t *jogo = inicio_jogo(arq);
@@ -292,7 +292,7 @@ int main(int argc, char const *argv[]){
 
   fclose(arq);
   
-*/
+
 
 	return 0;
 }
