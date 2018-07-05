@@ -131,6 +131,39 @@ void insere_jogador(jogo_t *jogo){  //inserir jogador em jogo
 
 void trocar_todas_pecas(jogo_t *jogo){
 	jogo->pula_vez=0;
+
+	for(int d=0; d<7; d++) {
+
+		int pos = rand() % jogo->saco->num_elementos;
+		printf("rand = %d\n",pos);
+
+		peca_t *toChange;
+		peca_t *novo = jogo->atual->suporte[d];
+		peca_t *aux_prev = jogo->saco->inicio;
+		peca_t *aux_prox = aux_prev->prox;
+
+		for(int i=0; i<pos; i++){
+			aux_prox = aux_prox->prox;
+			aux_prev = aux_prev->prox;
+		}
+
+		if(aux_prox == NULL){
+			jogo->saco->fim = novo;
+			novo->prox = aux_prox;
+			novo->prev = aux_prev;
+			aux_prev->prox = novo;
+		}
+
+		else{
+			novo->prox = aux_prox;
+			novo->prev = aux_prev;
+			aux_prev->prox = novo;
+			aux_prox->prev = novo;
+		}
+
+		jogo->atual->suporte[d] = remove_saco(jogo->saco);
+		jogo->saco->num_elementos++;
+	}
 }
 
 

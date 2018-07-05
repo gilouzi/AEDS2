@@ -219,16 +219,10 @@ int main(int argc, char const *argv[]){
     }
     printf("\n");
 
+    toVisit = jogo->saco->inicio; 
 
-
-    toVisit = jogo->saco->inicio;
-    /*while (toVisit != NULL) {
-      printf("%d ",toVisit->ponto);
-      toVisit = toVisit->prox;
-    } 
-    printf("\n"); */    
-
-    trocar_peca(jogo);
+    //trocar_peca(jogo);
+    trocar_todas_pecas(jogo);
 
     printf("Para continuar testando digite 1\n");
     scanf("%d", &a);
